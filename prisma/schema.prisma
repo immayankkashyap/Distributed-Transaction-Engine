@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  bookings  Booking[]
+}
+
+model Seat {
+  id        String     @id @default(uuid())
+  label     String     // e.g. "A1", "Row-5-Seat-12"
+  status    SeatStatus @default(AVAILABLE)
+  booking   Booking?
+  createdAt DateTime   @default(now())
+}
+
+enum SeatStatus {
+  AVAILABLE
+  BOOKED
+}
+// NOTE: Two states are sufficient for V1. A third state (PENDING/HELD) is
+// deferred until a future temporary-hold-during-payment feature.
+
+model Booking {
+  id        String   @id @default(uuid())
+  userId    String
+  seatId    String   @unique   // Structural guarantee against double-booking.
+  user      User     @relation(fields: [userId], references: [id])
+  seat      Seat     @relation(fields: [seatId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model IdempotencyKey {
+  id         String   @id @default(uuid())
+  key        String   @unique   // Client-sent Idempotency-Key header value.
+  response   Json                // Stored response payload for replay.
+  statusCode Int
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+}
