@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.env.*
+.git/
+.agents/
+.codex/
+.aws/
+.claude/
+.cursor/
+.devin/
+docs/
+loadtest/
+sql/
+*.log

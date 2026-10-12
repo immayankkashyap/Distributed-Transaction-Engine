@@ -4,3 +4,8 @@ src/generated/prisma/
 .env
 .env.*
 !.env.example
+.agents/
+.claude/
+.cursor/
+.devin/
+files.md/

@@ -23,6 +23,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
     "lint": "tslint -c tslint.json src/**/*.ts",
     "prepublishOnly": "npm run build",
     "postinstall": "prisma generate",
